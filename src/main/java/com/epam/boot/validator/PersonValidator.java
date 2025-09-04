@@ -1,7 +1,8 @@
 package com.epam.boot.validator;
 
+import com.epam.boot.dao.PersonDAO;
 import com.epam.boot.model.Person;
-import com.epam.boot.service.PersonService;
+import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -9,10 +10,10 @@ import org.springframework.validation.Validator;
 @Component
 public class PersonValidator implements Validator {
 
-  private final PersonService personService;
+  private final PersonDAO personDAO;
 
-  public PersonValidator(PersonService personService) {
-    this.personService = personService;
+  public PersonValidator(PersonDAO personDAO) {
+    this.personDAO = personDAO;
   }
 
   @Override
@@ -23,9 +24,9 @@ public class PersonValidator implements Validator {
   @Override
   public void validate(Object target, Errors errors) {
     Person person = (Person) target;
-    Person existingPerson = personService.getPersonByEmail(person.getEmail());
+    Optional<Person> existingPerson = personDAO.findByEmail(person.getEmail());
 
-    if (existingPerson.getId() != person.getId()) {
+    if (existingPerson.isPresent() && existingPerson.get().getId() != person.getId()) {
       errors.rejectValue("email", "", "Email already taken");
     }
   }
