@@ -4,6 +4,7 @@ import com.epam.boot.dao.PersonEntityDAO;
 import com.epam.boot.exception.PersonNotFoundException;
 import com.epam.boot.model.PersonEntity;
 import java.util.List;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +20,21 @@ public class PersonEntityService {
     return personDAO.findAll();
   }
 
+//  @Transactional(readOnly = true)
   public PersonEntity getPersonById(int id) {
-    return personDAO.findById(id).orElseThrow(PersonNotFoundException::new);
+    PersonEntity personEntity = personDAO.findById(id).orElseThrow(PersonNotFoundException::new);
+//    Hibernate.initialize(personEntity.getBooks());
+//    Hibernate.initialize(personEntity.getHobbies());
+    return personEntity;
   }
 
-  public PersonEntity getPersonByEmail(String email) {
-    return personDAO.findByEmail(email).orElseThrow(PersonNotFoundException::new);
+  public void printPeopleWithBooks() {
+//    List<PersonEntity> people = personDAO.findAll();
+        List<PersonEntity> people = personDAO.findAllWithPassportAndBooks();
+
+    for (PersonEntity person : people) {
+      System.out.println(person.getName() + " has " + person.getBooks().size() + " books");
+    }
   }
 
   @Transactional

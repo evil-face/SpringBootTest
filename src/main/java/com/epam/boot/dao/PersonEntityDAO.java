@@ -19,7 +19,25 @@ public class PersonEntityDAO {
 
   public Optional<PersonEntity> findById(int id) {
     return Optional.ofNullable(entityManager.find(PersonEntity.class, id));
+
+    //        return Optional.ofNullable(
+    //            entityManager
+    //                .createQuery(
+    //                    """
+    //            SELECT DISTINCT p
+    //            FROM PersonEntity p
+    //            LEFT JOIN FETCH p.passport
+    //            LEFT JOIN FETCH p.books
+    //            LEFT JOIN FETCH p.hobbies
+    //            WHERE p.id = :id
+    //        """,
+    //                    PersonEntity.class)
+    //                .setParameter("id", id)
+    //                .getSingleResult());
   }
+
+  // findPersonWithBooks()
+  // findPersonWIthHobbies()
 
   public void save(PersonEntity person) {
     entityManager.persist(person);
@@ -36,11 +54,11 @@ public class PersonEntityDAO {
     }
   }
 
-  public Optional<PersonEntity> findByEmail(String email) {
+  public List<PersonEntity> findAllWithPassportAndBooks() {
     return entityManager
-        .createQuery("SELECT p FROM PersonEntity p WHERE p.email = :email", PersonEntity.class)
-        .setParameter("email", email)
-        .getResultStream()
-        .findFirst();
+        .createQuery(
+            "SELECT DISTINCT p FROM PersonEntity p LEFT JOIN FETCH p.passport LEFT JOIN FETCH p.books",
+            PersonEntity.class)
+        .getResultList();
   }
 }

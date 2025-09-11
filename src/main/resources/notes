@@ -1,0 +1,25 @@
+CascadeType:
+
+CascadeType.PERSIST     -   entityManager.persist(parent)
+CascadeType.MERGE       -   entityManager.merge(parent)
+CascadeType.REMOVE      -   entityManager.remove(parent)
+CascadeType.REFRESH     -   entityManager.refresh(parent)
+CascadeType.DETACH      -   entityManager.detach(parent)
+CascadeType.ALL
+
+=======================================================================
+Eager vs Lazy
+
+Relationship        Default Fetch Type
+@OneToOne	        EAGER
+@ManyToOne	        EAGER
+@OneToMany	        LAZY
+@ManyToMany	        LAZY
+
+Why does it work by default? OSIV!
+1st way - set type for each relationship manually
+2nd way - @Transactional + manual init
+3rd way - manual JPQL fetch + change of bag types
+
+=======================================================================
+N+1 problem

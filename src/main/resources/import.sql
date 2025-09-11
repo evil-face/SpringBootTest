@@ -1,0 +1,1 @@
+--This is a Hibernate-specific file for data init

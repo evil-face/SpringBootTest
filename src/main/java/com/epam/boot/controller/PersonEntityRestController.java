@@ -5,6 +5,7 @@ import com.epam.boot.service.PersonEntityService;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,5 +48,11 @@ public class PersonEntityRestController {
   public void deletePerson(@PathVariable int id) {
     PersonEntity existing = personEntityService.getPersonById(id);
     personEntityService.deletePerson(id);
+  }
+
+  @GetMapping("/n1demo")
+  public ResponseEntity<String> nPlusOneDemoEndpoint() {
+    personEntityService.printPeopleWithBooks();
+    return ResponseEntity.ok("Check console");
   }
 }
